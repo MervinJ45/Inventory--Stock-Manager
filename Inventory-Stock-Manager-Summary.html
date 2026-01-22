@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="Inventory-Stock-Manager.css">
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <button><a href="Inventory-Stock-Manager.html">Add Item</a></button>
+            <button><a href="Inventory-Stock-Manager-Summary.html">Summary</a></button>
+            <button><a href="Inventory-Stock-Manager-Table.html">Table</a></button>
+        </aside>
+    </div>
+    <div>
+        <main class="content">
+            <h1>Inventory</h1>
+        
+            <div id="summaryCard" class="summmary-card">
+                <h3>Inventory Summary</h3>
+
+                <div class="summary-item">
+                    <div>Total Items</div>
+                    <span id="displayTotalItem"></span>
+                </div>
+
+                <div class="summary-item">
+                    <div>Total Value</div>
+                    <span id="displayTotalValue"></span>
+                </div>
+
+                <div class="summary-item">
+                    <div>Expired</div>
+                    <span id="displayExpiredItems"></span>
+                </div>
+
+                <div class="summary-item">
+                    <div>Expiring < 7Days</div>
+                            <span id="displayExpiringItems"></span>
+                    </div>
+
+                    <div class="updated-time">
+                        <div>Restock Due</div>
+                        <span id="displayRestockItems"></span>
+                    </div>
+                </div>
+        </main>
+    </div>
+    <script src="Inventory-Stock-Manager-Summary.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,20 @@
+body {
+    min-height: 100vh;
+    display: flex;
+}
+.layout {
+    display: flex;
+    flex: 1;
+}
+.sidebar{
+    width: 200px;
+    background-color: black;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+.content{
+    flex: 1;
+    background-color: white;
+}
