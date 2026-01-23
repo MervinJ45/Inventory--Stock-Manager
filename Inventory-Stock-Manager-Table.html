@@ -8,16 +8,16 @@
 <body>
     <div class="layout">
         <aside class="sidebar">
-            <button><a href="Inventory-Stock-Manager.html">Add Item</a></button>
-            <button><a href="Inventory-Stock-Manager-Summary.html">Summary</a></button>
-            <button><a href="Inventory-Stock-Manager-Table.html">Table</a></button>
+           <a href="Inventory-Stock-Manager.html"><button>Add Item</button></a>
+            <a href="Inventory-Stock-Manager-Summary.html"><button>Summary</button></a>
+            <a href="Inventory-Stock-Manager-Table.html"><button>Table</button></a>
         </aside>
     </div>
     <div>
         <main class="content">
             <h1>Inventory</h1>
             <div id="filterSearchContent">
-                <input id="searchBox" type="text">
+                <input id="searchBox" type="text" placeholder="Type To Search">
                 <h3>Filter by :</h3>
                 <div>
                     <label>Category</label>
@@ -38,7 +38,7 @@
                         <option>None</option>
                         <option>Expired</option>
                         <option>Expiring Soon</option>
-                        <option>Restock Due</option>
+                        <option>Restock Overdue</option>
                     </select>
                 </div>
                 <button id="applyFilterBtn">Apply Filter</button>
@@ -48,12 +48,13 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Name</th>
+                                <th id="sortByName">Name</th>
                                 <th>Category</th>
-                                <th>Quantity</th>
+                                <th id="sortByQuantity">Quantity</th>
                                 <th>Unit Price</th>
                                 <th>Total Price</th>
                                 <th>Added Date</th>
+                                <th>Expiry Date</th>
                                 <th>Expiry Status</th>
                                 <th>Restock Status</th>
                                 <th>Actions</th>
