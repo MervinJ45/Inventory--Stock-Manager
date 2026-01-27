@@ -196,7 +196,7 @@ function validateForm() {
         );
     }
 
-    if(itemName.value.length >= 2 && itemName != "" && category.value && quantity.value != "" && quantity.value >= 0 && unitPrice.value != "" && unitPrice.value > 0 && addedDate.value && expiryDate.value && expiryDate.value > addedDate.value && restockDate.value && restockDate.value >= expiryDate.value){
+    if(itemName.value.length >= 2 && itemName != "" && category.value && quantity.value != "" && quantity.value >= 0 && unitPrice.value != "" && unitPrice.value > 0 && addedDate.value && expiryDate.value && expiryDate.value > addedDate.value && restockDate.value && restockDate.value <= expiryDate.value){
         return true
     }
 

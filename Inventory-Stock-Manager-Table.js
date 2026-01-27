@@ -1,4 +1,5 @@
 let items;
+let filteredItems=[];
 
 const msPerDay = 86400000
 const searchBox = document.getElementById('searchBox');
@@ -6,15 +7,10 @@ const filterCategory = document.getElementById('filterCategory');
 const filterStatus = document.getElementById('filterStatus');
 
 function generateTable(items) {
-    if (searchBox.value == "") {
-        tableBody.innerHTML = "";
-        items.forEach((item) => {
-            renderItemAsRows(item);
-        })
-    }
-    else {
-        search(searchBox.value);
-    }
+    tableBody.innerHTML = "";
+    items.forEach((item) => {
+        renderItemAsRows(item);
+    })
 }
 
 function renderItemAsRows(item) {
@@ -136,27 +132,45 @@ function debounce(func, delay) {
     }
 }
 
-
 function search(searchInput) {
-    clearFilter();
+    let found = false;
+    let arrayToSearch;
+    if(filteredItems.length != 0){
+        arrayToSearch = filteredItems;
+    }
+    else{
+        arrayToSearch = items;
+    }
     tableBody.innerHTML = "";
-    searchInput = searchInput.toLowerCase();
-    items.forEach((item) => {
-        if (item.itemName.toLowerCase().includes(searchInput)) {
+    arrayToSearch.forEach((item) => {
+        if(item.itemName.toLowerCase().includes(searchInput)){
+            found = true;
             renderItemAsRows(item);
         }
     })
+    if(!found){
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="10" style="text-align:center; padding:20px; color:#666; font-size:14px;">
+                    No content for Searched Term
+                </td>
+            </tr>
+        `;
+    }
 }
 
 searchBox.addEventListener('input', (e) => debSearch(e.target.value))
 
 applyFilterBtn.onclick = () => {
+
+    filteredItems.length = 0;
+
     clearSearch();
+
     tableBody.innerHTML = "";
     
 
-    if (filterCategory.value === "All Category" && filterStatus.value === "All Status") {
-    console.log("ss")
+    if (filterCategory.value == "All Category" && filterStatus == "All Status") {
         generateTable(items);
         return;
     }
@@ -186,13 +200,16 @@ applyFilterBtn.onclick = () => {
                 statusMatch = (item.restockStatus === "Restock OverDue");
             }
         }
-
+        console.log(categoryMatch +" "+ statusMatch)
         if (categoryMatch && statusMatch) {
-            renderItemAsRows(item);
+            filteredItems.push(item);
             found = true;
         }
-        console.log(categoryMatch +" "+ statusMatch)
     });
+
+    if(found){
+        generateTable(filteredItems)
+    }
 
     if (!found) {
         tableBody.innerHTML = `
