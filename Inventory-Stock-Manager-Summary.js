@@ -5,8 +5,8 @@ let displayTotalValue = document.getElementById('displayTotalValue');
 let displayExpiredItems = document.getElementById('displayExpiredItems');
 let displayExpiringItems = document.getElementById('displayExpiringItems');
 let displayRestockItems = document.getElementById('displayRestockItems');
-
 let items;
+
 
 window.addEventListener('load',()=>{
     let string = localStorage.getItem('items');
@@ -22,14 +22,13 @@ function generateSummary() {
     let restockDueItems = 0;
     items.forEach((item) => {
         totalValue = Number(totalValue) +  Number(item.totalValue);
-        if(findExpireInDays(item.expiryDate) < 0){
+        if(findDaysToExpire(item.expiryDate) < 0){
             expiredItems = Number(expiredItems) + Number(1);
         }
-        else if(findExpireInDays(item.expiryDate) <= 7){
+        else if(findDaysToExpire(item.expiryDate) <= 7 && findDaysToExpire(item.expiryDate)>0){
             expiringItems = Number(expiringItems) + Number(1);
         }
-        if(findRestockInDays(item.restockDate) <= 0){
-            console.log(item)
+        if(findDaysToRestock(item.restockDate) <= 0){
             restockDueItems = Number(restockDueItems) + Number(1); 
         }
     })
@@ -40,89 +39,24 @@ function generateSummary() {
     displayRestockItems.innerHTML = restockDueItems;
 }
 
-function findDayToExpiryDay(expiryDate) {
-
+function findDaysToExpire(expiryDate){      
     let today = new Date();
     let expiry = new Date(expiryDate);
-
 
     today.setHours(0, 0, 0, 0);
     expiry.setHours(0, 0, 0, 0);
 
     let diffInMs = expiry - today;
     let diffInDays = Math.ceil(diffInMs / msPerDay);
-
-    if (diffInDays < 0) {
-        return 0;
-    }
+    
     return diffInDays;
 }
 
-function findExpiryStatus(expiryDate){
-    if(findDayToExpiryDay(expiryDate) == 0){
-        return "Expired";
-    }
-    else{
-        return `Expire in ${findDayToExpiryDay(expiryDate)} Days`;
-    }
-}
-
-function findDayToRestock(restockDate) {
-    
-    let today = new Date();
-    let restock = new Date(restockDate);
-
-    today.setHours(0, 0, 0, 0);
-    restock.setHours(0, 0, 0, 0);
-
-    let diffInMs = restock - today;
-    let diffInDays = Math.ceil(diffInMs / msPerDay);
-
-    if(diffInDays < 0){
-        return "Restock OverDue";
-    }
-
-    return `Restock in ${diffInDays} days`;
-}
-    function findRestockStatus(restockDate) {
-    if (!restockDate) return "No Restock Date";
-
+function findDaysToRestock(restockDate){
     let today = new Date();
     let restock = new Date(restockDate);
 
     if (isNaN(restock)) return "Invalid Restock Date";
-
-    today.setHours(0, 0, 0, 0);
-    restock.setHours(0, 0, 0, 0);
-
-    let diffInMs = restock - today;
-    let diffInDays = Math.ceil(diffInMs / msPerDay);
-
-    if(diffInDays <= 0){
-        return "Restock OverDue"
-    }
-
-    return `Restock in ${diffInDays} days`;
-}
-
-function findExpireInDays(expiryDate){
-    let today = new Date();
-    let expiry = new Date(expiryDate);
-
-
-    today.setHours(0, 0, 0, 0);
-    expiry.setHours(0, 0, 0, 0);
-
-    let diffInMs = expiry - today;
-    let diffInDays = Math.ceil(diffInMs / msPerDay);
-
-    return diffInDays;
-}
-
-function findRestockInDays(restockDate){
-    let today = new Date();
-    let restock = new Date(restockDate);
-
 
     today.setHours(0, 0, 0, 0);
     restock.setHours(0, 0, 0, 0);

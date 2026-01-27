@@ -109,8 +109,8 @@
 //         updatedAt: new Date()
 //     },
 //     {
-    //         id: 10,
-    //         itemName: "Tea Powder",
+//             id: 10,
+//             itemName: "Tea Powder",
 //         category: "Beverages",
 //         quantity: 4,
 //         unitPrice: 50,
@@ -123,12 +123,11 @@
 // ]
 
 const msPerDay = 86400000
-let items = JSON.parse(localStorage.getItem('items'))
-
 const form = document.getElementById('addItemForm');
 const saveItemBtn = document.getElementById('saveItemBtn');
 let idToEdit;
 let editMode = false;
+items = JSON.parse(localStorage.getItem('items'))
 
 function updateItemsInLocalStorage() {
     let string = JSON.stringify(items);
@@ -148,12 +147,11 @@ function validateForm() {
     const expiryDate = document.getElementById("expiryDate");
     const restockDate = document.getElementById("restockDate");
 
-    if (itemName.value.trim().length < 2) {
+    if (itemName.value.length < 2 || itemName == "") {
         itemName.parentElement.insertAdjacentHTML(
             "beforeend",
-            `<p class="error">Minimum 2 characters required</p>`
+            `<p class="error">Name can't be emapty and Minimum 2 characters required</p>`
         );
-        return false;
     }
 
     if (!category.value) {
@@ -161,23 +159,20 @@ function validateForm() {
             "beforeend",
             `<p class="error">Category is required</p>`
         );
-        return false;
     }
 
-    if (quantity.value === "" || quantity.value < 0 || !Number.isInteger(+quantity.value)) {
+    if (quantity.value == "" || quantity.value < 0) {
         quantity.parentElement.insertAdjacentHTML(
             "beforeend",
             `<p class="error">Quantity must be an integer greater than 0</p>`
         );
-        return false;
     }
 
-    if (unitPrice.value === "" || unitPrice.value < 0) {
+    if (unitPrice.value == "" || unitPrice.value < 0) {
         unitPrice.parentElement.insertAdjacentHTML(
             "beforeend",
             `<p class="error">Unit price must begreater than 0</p>`
         );
-        return false;
     }
 
     if (!addedDate.value) {
@@ -185,42 +180,25 @@ function validateForm() {
             "beforeend",
             `<p class="error">Added date is required</p>`
         );
-        return false;
-    }
-
-    if(!expiryDate.value){
-        expiryDate.parentElement.insertAdjacentHTML(
-            "beforeend",
-            `<p class="error">Expiry date must be added</p>`
-        );
-        return false;
     }
     
-    if (expiryDate.value < addedDate.value) {
+    if (!expiryDate.value || expiryDate.value < addedDate.value) {
         expiryDate.parentElement.insertAdjacentHTML(
             "beforeend",
-            `<p class="error">Expiry date must be after added date</p>`
+            `<p class="error">Expiry date can't be empty and should be after added date</p>`
         );
-        return false;
-    }
-    
-    if(!restockDate.value){
-        restockDate.parentElement.insertAdjacentHTML(
-            "beforeend",
-            `<p class="error">Restock date must be added</p>`
-        );
-        return false;
     }
 
-    if (restockDate.value > expiryDate.value) {
+    if (!restockDate.value || restockDate.value > expiryDate.value) {
         restockDate.parentElement.insertAdjacentHTML(
             "beforeend",
-            `<p class="error">Restock date should be before expiry date</p>`
+            `<p class="error">Restock date must be added and should be before expiry date</p>`
         );
-        return false;
     }
 
-    return true;
+    if(itemName.value.length >= 2 && itemName != "" && category.value && quantity.value != "" && quantity.value >= 0 && unitPrice.value != "" && unitPrice.value > 0 && addedDate.value && expiryDate.value && expiryDate.value > addedDate.value && restockDate.value && restockDate.value >= expiryDate.value){
+        return true
+    }
 
 }
 
@@ -240,7 +218,7 @@ saveItemBtn.onclick = () => {
                         item.expiryDate = expiryDate.value,
                         item.restockDate = restockDate.value,
                         item.expiryStatus = findExpiryStatus(expiryDate.value); 
-                        item.restockStatus = findRestockStatus(findExpiryStatus(expiryDate.value),restockDate.value);
+                        item.restockStatus = findRestockStatus(restockDate.value);
                         item.updatedAt = new Date(Date.now())
                     }
                 })
@@ -267,10 +245,10 @@ saveItemBtn.onclick = () => {
                     expiryDate: expiryDate.value,
                     restockDate: restockDate.value,
                     expiryStatus: findExpiryStatus(expiryDate.value),
-                    restockStatus: findRestockStatus(findExpiryStatus(expiryDate.value),restockDate.value),
+                    restockStatus: findRestockStatus(restockDate.value),
                     updatedAt: new Date(Date.now())
                 })
-            console.log(items)
+                // console.log(items);
             form.reset();
             window.alert("Item Added Successfully");
             updateItemsInLocalStorage();
@@ -279,11 +257,9 @@ saveItemBtn.onclick = () => {
 }
 
 function editItem(id) {
-    console.log("SSS");
     editMode = true;
     idToEdit = id;
     saveItemBtn.innerHTML = "Update";
-    console.log(items);
     items.forEach((item) => {
         if (item.id == id) {
             itemName.value = item.itemName;
@@ -297,33 +273,33 @@ function editItem(id) {
     })
 }
 
-function findExpiryStatus(expiryDate) {
-    if (!expiryDate) return "No Expiry Date";
-
+function findDaysToExpire(expiryDate){      
     let today = new Date();
     let expiry = new Date(expiryDate);
-
-    if (isNaN(expiry)) return "Invalid Expiry Date";
 
     today.setHours(0, 0, 0, 0);
     expiry.setHours(0, 0, 0, 0);
 
     let diffInMs = expiry - today;
     let diffInDays = Math.ceil(diffInMs / msPerDay);
-
-    if (diffInDays < 0) {
-        return "Expired";
-    }
-    return `Expire in ${diffInDays} days`;
+    
+    return diffInDays;
 }
 
-function findRestockStatus(expiryStatus, restockDate) {
-    if (!restockDate) return "No Restock Date";
+function findExpiryStatus(expiryDate) {
 
-    if (expiryStatus === "Expired") {
-        return "Restock Overdue";
+    let noOfDaysToExpire = findDaysToExpire(expiryDate);
+
+    if(noOfDaysToExpire <= 0){
+        return "Expired";
     }
 
+    else{
+        return `Expire in ${noOfDaysToExpire} days`;
+    }
+}
+
+function findDaysToRestock(restockDate){
     let today = new Date();
     let restock = new Date(restockDate);
 
@@ -335,7 +311,21 @@ function findRestockStatus(expiryStatus, restockDate) {
     let diffInMs = restock - today;
     let diffInDays = Math.ceil(diffInMs / msPerDay);
 
-    return `Restock in ${diffInDays} days`;
+    return diffInDays;
+}
+
+function findRestockStatus(restockDate) {
+
+    let noOfDaysToRestock = findDaysToRestock(restockDate);
+
+    if(noOfDaysToRestock <= 0){
+        return "Restock OverDue"
+    }
+
+    else{
+        return `Restock in ${noOfDaysToRestock} days`;
+    }
+
 }
 
 

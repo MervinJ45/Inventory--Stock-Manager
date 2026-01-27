@@ -15,14 +15,13 @@
     </div>
     <div>
         <main class="content">
-            <h1>Inventory</h1>
+            <h1>Inventory</h1><br>
             <div id="filterSearchContent">
-                <input id="searchBox" type="text" placeholder="Type To Search">
+            <input id="searchBox" type="text" placeholder="Type To Search">
                 <h3>Filter by :</h3>
                 <div>
-                    <label>Category</label>
                     <select id="filterCategory">
-                        <option>None</option>
+                        <option>All Category</option>
                         <option>Groceries</option>
                         <option>Dairy</option>
                         <option>Poultry</option>
@@ -33,9 +32,8 @@
                     </select>
                 </div>
                 <div>
-                    <label>Status</label>
                     <select id="filterStatus">
-                        <option>None</option>
+                        <option>All Status</option>
                         <option>Expired</option>
                         <option>Expiring Soon</option>
                         <option>Restock Overdue</option>
@@ -48,7 +46,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th id="sortByName">Name</th>
+                                <th id="sortByName">Name ▼</th>
                                 <th>Category</th>
                                 <th id="sortByQuantity">Quantity</th>
                                 <th>Unit Price</th>
