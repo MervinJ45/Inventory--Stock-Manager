@@ -122,6 +122,7 @@
 //     }
 // ]
 
+
 const msPerDay = 86400000
 const form = document.getElementById('addItemForm');
 const saveItemBtn = document.getElementById('saveItemBtn');
@@ -334,5 +335,5 @@ window.addEventListener('load', () => {
     idToEdit = currentUrl.split('?')[1];
     if (idToEdit) {
         editItem(idToEdit);
-    }
+    }   
 })
