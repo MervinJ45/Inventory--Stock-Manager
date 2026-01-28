@@ -100,7 +100,7 @@ p {
 }
 
 #tableView {
-    height: 490px;
+    height: 480px;
     margin-left: 15%;
     overflow-x: auto;
     width: 75%;
