@@ -190,14 +190,14 @@ function validateForm() {
         );
     }
 
-    if (!restockDate.value || restockDate.value > expiryDate.value) {
+    if (!restockDate.value) {
         restockDate.parentElement.insertAdjacentHTML(
             "beforeend",
-            `<p class="error">Restock date must be added and should be before expiry date</p>`
+            `<p class="error">Restock date must be added</p>`
         );
     }
 
-    if(itemName.value.length >= 2 && itemName != "" && category.value && quantity.value != "" && quantity.value >= 0 && unitPrice.value != "" && unitPrice.value > 0 && addedDate.value && expiryDate.value && expiryDate.value > addedDate.value && restockDate.value && restockDate.value <= expiryDate.value){
+    if(itemName.value.length >= 2 && itemName != "" && category.value && quantity.value != "" && quantity.value >= 0 && unitPrice.value != "" && unitPrice.value > 0 && addedDate.value && expiryDate.value && expiryDate.value > addedDate.value && restockDate.value){
         return true
     }
 
@@ -214,8 +214,8 @@ saveItemBtn.onclick = () => {
                         item.category = category.value,
                         item.quantity = quantity.value,
                         item.unitPrice = unitPrice.value;
-                    item.totalValue = quantity.value * unitPrice.value;
-                    item.addedDate = addedDate.value,
+                        item.totalValue = quantity.value * unitPrice.value;
+                        item.addedDate = addedDate.value,
                         item.expiryDate = expiryDate.value,
                         item.restockDate = restockDate.value,
                         item.expiryStatus = findExpiryStatus(expiryDate.value); 
@@ -229,6 +229,7 @@ saveItemBtn.onclick = () => {
                 editMode = false;
                 window.alert("Item Edited Successfully");
                 updateItemsInLocalStorage();
+                document.getElementById('heading').innerHTML = 'Add Form'
                 window.location.href = "Inventory-Stock-Manager-Table.html"
             }
         }
@@ -260,6 +261,7 @@ saveItemBtn.onclick = () => {
 function editItem(id) {
     editMode = true;
     idToEdit = id;
+    document.getElementById('heading').innerHTML = 'Edit Item'
     saveItemBtn.innerHTML = "Update";
     items.forEach((item) => {
         if (item.id == id) {
@@ -304,8 +306,6 @@ function findDaysToRestock(restockDate){
     let today = new Date();
     let restock = new Date(restockDate);
 
-    if (isNaN(restock)) return "Invalid Restock Date";
-
     today.setHours(0, 0, 0, 0);
     restock.setHours(0, 0, 0, 0);
 
@@ -328,6 +328,18 @@ function findRestockStatus(restockDate) {
     }
 
 }
+
+function formatDate() {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    let today = `${year}-${month}-${day}`;
+    document.getElementById("addedDate").setAttribute("max", today);
+}
+
+formatDate()
 
 
 window.addEventListener('load', () => {

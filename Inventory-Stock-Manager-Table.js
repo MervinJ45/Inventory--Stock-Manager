@@ -20,15 +20,16 @@ function renderItemAsRows(item) {
   <td>${item.totalValue}</td><td>${formatDateToDisplay(new Date(item.addedDate))}</td><td>${formatDateToDisplay(new Date(item.expiryDate))}</td><td>${item.expiryStatus}</td>
   <td>${item.restockStatus}</td>
   <td>
-    <button onclick="editItem(${item.id})">Edit</button>
-    <button onclick="deleteItem(${item.id})">Delete</button>
-    <button onclick="restockItem(${item.id})">Restock</button>
+    <i title="Edit" class="fa fa-pencil-square-o" style="font-size: 20px; color: #333;" onclick="editItem(${item.id})"></i>
+    <i title="Delete" class="fa fa-trash" style="font-size: 20px; color: #333;" onclick="deleteItem(${item.id})"></i>
+    <i title="Restock" class="fa fa-retweet" style="font-size: 20px; color: #333;" onclick="restockItem(${item.id})"></i>
+    
     </td>`;
     tableBody.appendChild(row);
 }
 
 function editItem(id) {
-    updateItemsInLocalStorage();
+    // updateItemsInLocalStorage();
     window.location.href = "Inventory-Stock-Manager.html?" + id
 }
 
@@ -161,41 +162,41 @@ function search(searchInput) {
 
 searchBox.addEventListener('input', (e) => debSearch(e.target.value))
 
-applyFilterBtn.onclick = () => {
-
+function applyFilter(){
+    
     filteredItems.length = 0;
 
     clearSearch();
-
+    
     tableBody.innerHTML = "";
     
-
+    
     if (filterCategory.value == "All Category" && filterStatus == "All Status") {
         generateTable(items);
         return;
     }
-
+    
     let found = false;
-
+    
     items.forEach((item) => {
-
+        
         let categoryMatch = true;
         let statusMatch = true;
-
+        
         if (filterCategory.value !== "All Category") {
             categoryMatch = (item.category === filterCategory.value);
         }
-
+        
         if (filterStatus.value !== "All Status") {
-
+            
             if (filterStatus.value === "Expired") {
                 statusMatch = (item.expiryStatus === "Expired");
             }
-
+            
             else if (filterStatus.value === "Expiring Soon") {
                 statusMatch = (findDaysToExpire(item.expiryDate) <= 7 && findDaysToExpire(item.expiryDate) > 0);
             }
-
+            
             else if (filterStatus.value === "Restock Overdue") {
                 statusMatch = (item.restockStatus === "Restock OverDue");
             }
@@ -206,17 +207,17 @@ applyFilterBtn.onclick = () => {
             found = true;
         }
     });
-
+    
     if(found){
         generateTable(filteredItems)
     }
 
     if (!found) {
         tableBody.innerHTML = `
-            <tr>
-                <td colspan="10" style="text-align:center; padding:20px; color:#666; font-size:14px;">
-                    No content for applied filter
-                </td>
+        <tr>
+        <td colspan="10" style="text-align:center; padding:20px; color:#666; font-size:14px;">
+        No content for applied filter
+        </td>
             </tr>
         `;
     }
@@ -263,8 +264,19 @@ function updateItemsInLocalStorage() {
     localStorage.setItem("items", string);
 }
 
+let statusToCheck;
+
 window.addEventListener('load', () => {
     let string = localStorage.getItem('items');
     items = JSON.parse(string);
-    generateTable(items);
+    let currentUrl = window.location.href;
+    statusToCheck = decodeURI(currentUrl.split('?')[1]);
+    if(statusToCheck == "Expired" || statusToCheck == "Expiring Soon" || statusToCheck == "Restock Overdue"){
+        filterStatus.value = statusToCheck;
+        applyFilter();
+    }
+    else{
+        filterStatus.value = "All Status";
+        generateTable(items);
+    }
 })

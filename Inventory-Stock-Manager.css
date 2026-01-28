@@ -28,6 +28,17 @@ body {
     color: #ffffff;
 }
 
+#active{
+    width: 100%;
+    margin-bottom: 10px;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    background-color: white;
+    color: #34495e;
+;
+}
+
 .content {
     padding: 25px;
     flex: 1;
@@ -89,6 +100,7 @@ p {
 }
 
 #tableView {
+    height: 490px;
     margin-left: 15%;
     overflow-x: auto;
     width: 75%;
@@ -121,6 +133,11 @@ td button {
     font-size: 12px;
     background-color: #34495e;
     color: white;
+}
+
+#tableView thead tr{
+    position: sticky;
+    top: 0;
 }
 
 #filterSearchContent {
@@ -232,6 +249,10 @@ td button {
     color: #111827;
 }
 
+.clickable-div{
+    cursor: pointer;
+}
+
 @media (max-width: 1050px){
     #tableView {
         margin-left: 20%;
@@ -270,6 +291,7 @@ td button {
         margin-top: 15%;
     }
     
+    
     .content {
         padding: 15px;
     }
@@ -289,7 +311,7 @@ td button {
         width: auto;
     }
     #filterSearchContent {
-        margin-top: 50px;
+        margin-top: 15%;
         margin-left: 0%;
         width: 100%;
         flex-direction: column;

@@ -9,7 +9,7 @@
 <body>
     <div class="layout">
         <aside class="sidebar">
-            <a href="Inventory-Stock-Manager.html"><button>Add Item</button></a>
+            <a href="Inventory-Stock-Manager.html"><button id="active" >Add Item</button></a>
             <a href="Inventory-Stock-Manager-Summary.html"><button>Summary</button></a>
             <a href="Inventory-Stock-Manager-Table.html"><button>Table</button></a>
         </aside>
@@ -17,6 +17,7 @@
     <div>
         <main class="content">
             <form id="addItemForm">
+                <h3 id="heading" style="text-align: center;">Add Item</h3><br>
                 <div id="formGroup1" class="form-group">
                     <label>Item Name</label>
                     <input type="text" id="itemName" required />

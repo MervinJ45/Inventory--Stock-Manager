@@ -39,13 +39,14 @@ function generateSummary() {
     displayRestockItems.innerHTML = restockDueItems;
 }
 
+
 function findDaysToExpire(expiryDate){      
     let today = new Date();
     let expiry = new Date(expiryDate);
-
+    
     today.setHours(0, 0, 0, 0);
     expiry.setHours(0, 0, 0, 0);
-
+    
     let diffInMs = expiry - today;
     let diffInDays = Math.ceil(diffInMs / msPerDay);
     
@@ -55,14 +56,26 @@ function findDaysToExpire(expiryDate){
 function findDaysToRestock(restockDate){
     let today = new Date();
     let restock = new Date(restockDate);
-
+    
     if (isNaN(restock)) return "Invalid Restock Date";
-
+    
     today.setHours(0, 0, 0, 0);
     restock.setHours(0, 0, 0, 0);
-
+    
     let diffInMs = restock - today;
     let diffInDays = Math.ceil(diffInMs / msPerDay);
-
+    
     return diffInDays;
 }
+
+goToExpiredItems.addEventListener('click',()=>{
+    window.location.href = "Inventory-Stock-Manager-table.html?Expired"; 
+})
+
+goToExpiringItems.addEventListener('click',()=>{
+    window.location.href = "Inventory-Stock-Manager-table.html?Expiring%20Soon"; 
+})
+
+goToRestockItems.addEventListener('click',()=>{
+    window.location.href = "Inventory-Stock-Manager-table.html?Restock Overdue"; 
+})
