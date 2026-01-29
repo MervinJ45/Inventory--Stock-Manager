@@ -253,6 +253,10 @@ td button {
     cursor: pointer;
 }
 
+.clickable-div:hover{
+    opacity: 0.7;
+}
+
 @media (max-width: 1050px){
     #tableView {
         margin-left: 20%;

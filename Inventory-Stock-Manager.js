@@ -151,7 +151,7 @@ function validateForm() {
     if (itemName.value.length < 2 || itemName == "") {
         itemName.parentElement.insertAdjacentHTML(
             "beforeend",
-            `<p class="error">Name can't be emapty and Minimum 2 characters required</p>`
+            `<p class="error">Name can't be epty and Minimum 2 characters required</p>`
         );
     }
 
@@ -237,7 +237,7 @@ saveItemBtn.onclick = () => {
         else {
             if (validateForm()) {
                 items.push({
-                    id: items.length + 1,
+                    id:  crypto. randomUUID(),
                     itemName: itemName.value,
                     category: category.value,
                     quantity: quantity.value,
@@ -250,7 +250,7 @@ saveItemBtn.onclick = () => {
                     restockStatus: findRestockStatus(restockDate.value),
                     updatedAt: new Date(Date.now())
                 })
-                // console.log(items);
+                console.log(items);
             form.reset();
             window.alert("Item Added Successfully");
             updateItemsInLocalStorage();

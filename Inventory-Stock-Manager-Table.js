@@ -20,9 +20,9 @@ function renderItemAsRows(item) {
   <td>${item.totalValue}</td><td>${formatDateToDisplay(new Date(item.addedDate))}</td><td>${formatDateToDisplay(new Date(item.expiryDate))}</td><td>${item.expiryStatus}</td>
   <td>${item.restockStatus}</td>
   <td>
-    <i title="Edit" class="fa fa-pencil-square-o" style="font-size: 20px; color: #333;" onclick="editItem(${item.id})"></i>
-    <i title="Delete" class="fa fa-trash" style="font-size: 20px; color: #333;" onclick="deleteItem(${item.id})"></i>
-    <i title="Restock" class="fa fa-retweet" style="font-size: 20px; color: #333;" onclick="restockItem(${item.id})"></i>
+    <i title="Edit" class="fa fa-pencil-square-o" style="font-size: 20px; cursor: pointer; color: #333;" onclick="editItem('${item.id}')"></i>
+    <i title="Delete" class="fa fa-trash" style="font-size: 20px; cursor: pointer; color: #333;" onclick="deleteItem('${item.id}')"></i>
+    <i title="Restock" class="fa fa-retweet" style="font-size: 20px; cursor: pointer; color: #333;" onclick="restockItem("${item.id}")"></i>
     
     </td>`;
     tableBody.appendChild(row);
@@ -72,7 +72,7 @@ function findDaysToExpire(expiryDate){
     let diffInDays = Math.ceil(diffInMs / msPerDay);
     
     return diffInDays;
-}
+}  
 
 function findExpiryStatus(expiryDate) {
     
@@ -247,12 +247,10 @@ document.getElementById('sortByName').addEventListener('click',()=>{
     clearFilter();
     clearSearch();
     if(asc){
-        document.getElementById('sortByName').innerHTML = "Name ▲";
         let sorted = items.sort((a, b) => a.itemName.localeCompare(b.itemName));
         generateTable(sorted);
     }
     else{
-        document.getElementById('sortByName').innerHTML = "Name ▼";
         let sorted = items.sort((a, b) => b.itemName.localeCompare(a.itemName));
         generateTable(sorted);
     }
