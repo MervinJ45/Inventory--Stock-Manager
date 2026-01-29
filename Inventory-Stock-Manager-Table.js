@@ -22,7 +22,7 @@ function renderItemAsRows(item) {
   <td>
     <i title="Edit" class="fa fa-pencil-square-o" style="font-size: 20px; cursor: pointer; color: #333;" onclick="editItem('${item.id}')"></i>
     <i title="Delete" class="fa fa-trash" style="font-size: 20px; cursor: pointer; color: #333;" onclick="deleteItem('${item.id}')"></i>
-    <i title="Restock" class="fa fa-retweet" style="font-size: 20px; cursor: pointer; color: #333;" onclick="restockItem("${item.id}")"></i>
+    <i title="Restock" class="fa fa-retweet" style="font-size: 20px; cursor: pointer; color: #333;" onclick="restockItem('${item.id}')"></i>
     
     </td>`;
     tableBody.appendChild(row);
