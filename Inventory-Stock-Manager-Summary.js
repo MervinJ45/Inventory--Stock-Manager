@@ -34,7 +34,7 @@ function generateSummary() {
     })
     displayTotalItem.innerHTML = items.length;
     displayTotalValue.innerHTML = totalValue;
-    displayExpiredItems.innerHTML = expiredItems;
+    displayExpiredItems.innerHTML =  expiredItems;
     displayExpiringItems.innerHTML = expiringItems;
     displayRestockItems.innerHTML = restockDueItems;
 }

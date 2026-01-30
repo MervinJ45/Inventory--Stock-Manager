@@ -4,150 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Inventory Management System</title>
+    <link rel="stylesheet" href="Inventory-Stock-Manager.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            display: flex;
-            min-height: 100vh;
-            background-color: #f4f6f8;
-        }
-
-        .sidebar {
-            width: 175px;
-            min-height: 100vh;
-            background-color: #2c3e50;
-            padding: 20px;
-        }
-
-        .sidebar h2 {
-            color: #ffffff;
-            font-size: 18px;
-            margin-bottom: 25px;
-        }
-
-        .sidebar button {
-            width: 100%;
-            margin-bottom: 10px;
-            border: none;
-            background-color: #34495e;
-            padding: 10px;
-            cursor: pointer;
-            color: #ffffff;
-        }
-
-        #active {
-            width: 100%;
-            margin-bottom: 10px;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            background-color: white;
-            color: #34495e;
-            ;
-        }
-
-        .main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .hero {
-            background-color: #ffffff;
-            border-bottom: 1px solid #ddd;
-            padding: 30px;
-        }
-
-        .hero h1 {
-            font-size: 28px;
-            color: #1f2a36;
-            margin-bottom: 5px;
-        }
-
-        .hero p {
-            color: #555;
-            font-size: 14px;
-        }
-
-        .section {
-            padding: 30px;
-            max-width: 1100px;
-        }
-
-        .section h2 {
-            margin-bottom: 15px;
-            color: #1f2a36;
-        }
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .card {
-            background-color: #ffffff;
-            border: 1px solid #e0e0e0;
-            padding: 20px;
-            border-radius: 4px;
-        }
-
-        .card h3 {
-            margin-bottom: 8px;
-            color: #2c3e50;
-        }
-
-        .card p {
-            font-size: 14px;
-            color: #666;
-            line-height: 1.4;
-        }
-
-        footer {
-            margin-top: auto;
-            background-color: #f0f2f4;
-            color: #666;
-            text-align: center;
-            padding: 12px;
-            font-size: 13px;
-            border-top: 1px solid #ddd;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                min-height: auto;
-                display: flex;
-                gap: 10px;
-                padding: 10px;
-            }
-
-            /* .sidebar h2 {
-                display: none;
-            } */
-
-            .sidebar button {
-                margin-bottom: 2%;
-                flex: 1;
-                font-size: 14px;
-            }
-
-            .cards {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -155,49 +13,52 @@
     <aside class="sidebar">
         <button id="active" onclick="goToHome()"><i class="fa fa-home"></i> Home</button>
         <button onclick="goToAdd()">Add Items</button>
-        <button onclick="goToSummary()">Summary</button>
         <button onclick="goToTable()">Table</button>
     </aside>
 
-    <div class="main">
+    <div class="home-main">
 
         <header class="hero">
             <h1>Inventory Management System</h1>
             <p>Track stock, expiry dates, and restocking efficiently</p>
-        </header>
+        </header> 
 
         <section class="section">
-            <h2>Features</h2>
+            <h2>Summary</h2>
 
             <div class="cards">
-                <div class="card">
-                    <h3>Add & Manage Items</h3>
-                    <p>
-                        Store item details such as quantity, price, expiry date,
-                        and restock schedule.
-                    </p>
+                <div id="totalItem" class="card">
+                    <h3>Total Items</h3>
+                    <div class="summary-value" id="displayTotalItem">0</div>
                 </div>
 
-                <div class="card">
-                    <h3>Expiry Tracking</h3>
-                    <p>
-                        Automatically identify expired and expiring items to
-                        reduce losses.
-                    </p>
+                <div id="totalValue" class="card">
+                    <h3>Total Value</h3>
+                    <div class="summary-value" id="displayTotalValue">₹0</div>
                 </div>
 
-                <div class="card">
-                    <h3>Stock Monitoring</h3>
-                    <p>
-                        Know when items need restocking and maintain optimal
-                        inventory levels.
-                    </p>
+                <div id="goToExpiredItems" class="card clickable-div">
+                    <h3>Expired Items</h3>
+                    <div class="summary-value" id="displayExpiredItems">0</div>
+                    <i class="fa fa-arrow-right"></i>
+                </div>
+
+                <div id="goToExpiringItems" class="card clickable-div">
+                    <h3>Expiring Items (7 days)</h3>
+                    <div class="summary-value" id="displayExpiringItems">0</div>
+                    <i class="fa fa-arrow-right"></i>
+                </div>
+
+                <div id="goToRestockItems" class="card clickable-div">
+                    <h3>Restock Overdue</h3>
+                    <div class="summary-value" id="displayRestockItems">0</div>
+                    <i class="fa fa-arrow-right"></i>
                 </div>
             </div>
         </section>
 
         <footer>
-            Inventory Stock Manager © 2026
+            Inventory Management System © 2026
         </footer>
 
     </div>
@@ -206,11 +67,9 @@
         function goToAdd() {
             window.location.href = "Inventory-Stock-Manager.html";
         }
-
         function goToSummary() {
             window.location.href = "Inventory-Stock-Manager-Summary.html";
         }
-
         function goToTable() {
             window.location.href = "Inventory-Stock-Manager-Table.html";
         }
@@ -219,6 +78,7 @@
         }
     </script>
 
-</body>
+    <script src="Inventory-Stock-Manager-Summary.js"></script>
 
-</html> 
+</body>
+</html>

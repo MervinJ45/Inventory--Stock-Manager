@@ -7,10 +7,15 @@ const filterCategory = document.getElementById('filterCategory');
 const filterStatus = document.getElementById('filterStatus');
 
 function generateTable(items) {
-    tableBody.innerHTML = "";
-    items.forEach((item) => {
-        renderItemAsRows(item);
-    })
+    if(searchBox.value != ""){
+        search(searchBox.value);
+    }
+    else{
+        tableBody.innerHTML = "";
+        items.forEach((item) => {
+            renderItemAsRows(item);
+        })
+    }
 }
 
 function renderItemAsRows(item) {
@@ -20,9 +25,9 @@ function renderItemAsRows(item) {
   <td>${item.totalValue}</td><td>${formatDateToDisplay(new Date(item.addedDate))}</td><td>${formatDateToDisplay(new Date(item.expiryDate))}</td><td>${item.expiryStatus}</td>
   <td>${item.restockStatus}</td>
   <td>
-    <i title="Edit" class="fa fa-pencil-square-o" style="font-size: 20px; cursor: pointer; color: #333;" onclick="editItem('${item.id}')"></i>
-    <i title="Delete" class="fa fa-trash" style="font-size: 20px; cursor: pointer; color: #333;" onclick="deleteItem('${item.id}')"></i>
-    <i title="Restock" class="fa fa-retweet" style="font-size: 20px; cursor: pointer; color: #333;" onclick="restockItem('${item.id}')"></i>
+    <i title="Edit" class="fa fa-pencil-square-o" style="font-size: 20px; cursor: pointer; color: blue;" onclick="editItem('${item.id}')"></i>
+    <i title="Delete" class="fa fa-trash" style="font-size: 20px; cursor: pointer; color: red;" onclick="deleteItem('${item.id}')"></i>
+    <i title="Restock" class="fa fa-retweet" style="font-size: 20px; cursor: pointer; color: green;" onclick="restockItem('${item.id}')"></i>
     
     </td>`;
     tableBody.appendChild(row);
@@ -39,7 +44,13 @@ function deleteItem(id) {
         return;
     }
     items = items.filter((item) => item.id != id);
-    generateTable(items);
+    if(filteredItems.length != 0){
+        filteredItems = filteredItems.filter((item) => item.id != id);
+        generateTable(filteredItems);
+    }
+    else{
+        generateTable(items);
+    }
     updateItemsInLocalStorage();
     
 }
@@ -56,7 +67,12 @@ function restockItem(id) {
             item.totalValue = Number(item.quantity) * Number(item.unitPrice);
         }
     })
-    generateTable(items);
+    if(filteredItems.length != 0){
+        generateTable(filteredItems);
+    }
+    else{
+        generateTable(items);
+    }
     updateItemsInLocalStorage();
 }
 

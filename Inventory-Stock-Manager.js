@@ -135,6 +135,11 @@ function updateItemsInLocalStorage() {
     localStorage.setItem("items", string);
 }
 
+document.querySelectorAll("input").forEach(el => {
+    el.addEventListener("blur", () => {
+        validateForm()
+    });
+});
 
 function validateForm() {
 
@@ -151,28 +156,21 @@ function validateForm() {
     if (itemName.value.length < 2 || itemName == "") {
         itemName.parentElement.insertAdjacentHTML(
             "beforeend",
-            `<p class="error">Name can't be epty and Minimum 2 characters required</p>`
-        );
-    }
-
-    if (!category.value) {
-        category.parentElement.insertAdjacentHTML(
-            "beforeend",
-            `<p class="error">Category is required</p>`
+            `<p class="error">Min 2 Characters</p>`
         );
     }
 
     if (quantity.value == "" || quantity.value < 0) {
         quantity.parentElement.insertAdjacentHTML(
             "beforeend",
-            `<p class="error">Quantity must be an integer greater than 0</p>`
+            `<p class="error">Quantity must be greater than 0</p>`
         );
     }
 
     if (unitPrice.value == "" || unitPrice.value < 0) {
         unitPrice.parentElement.insertAdjacentHTML(
             "beforeend",
-            `<p class="error">Unit price must begreater than 0</p>`
+            `<p class="error">Unit price must be greater than 0</p>`
         );
     }
 
@@ -186,7 +184,7 @@ function validateForm() {
     if (!expiryDate.value || expiryDate.value < addedDate.value) {
         expiryDate.parentElement.insertAdjacentHTML(
             "beforeend",
-            `<p class="error">Expiry date can't be empty and should be after added date</p>`
+            `<p class="error">Expiry date should be after added date</p>`
         );
     }
 
