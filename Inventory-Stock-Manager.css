@@ -78,7 +78,7 @@ body {
     cursor: pointer;
 }
 
-.card:hover {
+.clickable-div:hover {
     transform: translateY(-6px);
 }
 
@@ -95,7 +95,7 @@ body {
 
 form {
     overflow-x: hidden;
-    width: 100%;
+    width: 25em;
     margin-left: 100%;
     background-color: #ffffff;
     padding: 20px;
@@ -380,7 +380,7 @@ td button {
     }
 
     .sidebar button {
-        margin-bottom: 0;
+        margin-bottom: 10px;
         flex: 1;
         font-size: 14px;
     }

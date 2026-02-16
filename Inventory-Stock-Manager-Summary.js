@@ -57,8 +57,6 @@ function findDaysToRestock(restockDate){
     let today = new Date();
     let restock = new Date(restockDate);
     
-    if (isNaN(restock)) return "Invalid Restock Date";
-    
     today.setHours(0, 0, 0, 0);
     restock.setHours(0, 0, 0, 0);
     
@@ -77,5 +75,5 @@ goToExpiringItems.addEventListener('click',()=>{
 })
 
 goToRestockItems.addEventListener('click',()=>{
-    window.location.href = "Inventory-Stock-Manager-table.html?Restock Overdue"; 
+    window.location.href = "Inventory-Stock-Manager-table.html?Restock%20Overdue"; 
 })

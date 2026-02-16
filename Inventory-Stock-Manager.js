@@ -126,9 +126,10 @@
 const msPerDay = 86400000
 const form = document.getElementById('addItemForm');
 const saveItemBtn = document.getElementById('saveItemBtn');
+const resetBtn = document.getElementById('resetBtn');
 let idToEdit;
 let editMode = false;
-items = JSON.parse(localStorage.getItem('items'))
+items = JSON.parse(localStorage.getItem('items')) || null;
 
 function updateItemsInLocalStorage() {
     let string = JSON.stringify(items);
@@ -180,7 +181,7 @@ function validateForm() {
             `<p class="error">Added date is required</p>`
         );
     }
-    
+
     if (!expiryDate.value || expiryDate.value < addedDate.value) {
         expiryDate.parentElement.insertAdjacentHTML(
             "beforeend",
@@ -195,12 +196,16 @@ function validateForm() {
         );
     }
 
-    if(itemName.value.length >= 2 && itemName != "" && category.value && quantity.value != "" && quantity.value >= 0 && unitPrice.value != "" && unitPrice.value > 0 && addedDate.value && expiryDate.value && expiryDate.value > addedDate.value && restockDate.value){
+    if (itemName.value.length >= 2 && itemName != "" && category.value && quantity.value != "" && quantity.value >= 0 && unitPrice.value != "" && unitPrice.value > 0 && addedDate.value && expiryDate.value && expiryDate.value > addedDate.value && restockDate.value) {
         return true
     }
 
 }
 
+resetBtn.onclick = (e) => {
+    form.reset();
+    document.querySelectorAll(".error").forEach(err => err.remove());
+}
 
 saveItemBtn.onclick = () => {
 
@@ -212,43 +217,43 @@ saveItemBtn.onclick = () => {
                         item.category = category.value,
                         item.quantity = quantity.value,
                         item.unitPrice = unitPrice.value;
-                        item.totalValue = quantity.value * unitPrice.value;
-                        item.addedDate = addedDate.value,
+                    item.totalValue = quantity.value * unitPrice.value;
+                    item.addedDate = addedDate.value,
                         item.expiryDate = expiryDate.value,
                         item.restockDate = restockDate.value,
-                        item.expiryStatus = findExpiryStatus(expiryDate.value); 
-                        item.restockStatus = findRestockStatus(restockDate.value);
-                        item.updatedAt = new Date(Date.now())
-                    }
-                })
-                saveItemBtn.innerHTML = "Add";
-                form.reset();
-                idToEdit = "";
-                editMode = false;
-                window.alert("Item Edited Successfully");
-                updateItemsInLocalStorage();
-                document.getElementById('heading').innerHTML = 'Add Form'
-                window.location.href = "Inventory-Stock-Manager-Table.html"
-            }
+                        item.expiryStatus = findExpiryStatus(expiryDate.value);
+                    item.restockStatus = findRestockStatus(restockDate.value);
+                    item.updatedAt = new Date(Date.now())
+                }
+            })
+            saveItemBtn.innerHTML = "Add";
+            form.reset();
+            idToEdit = "";
+            editMode = false;
+            window.alert("Item Edited Successfully");
+            updateItemsInLocalStorage();
+            document.getElementById('heading').innerHTML = 'Add Form'
+            window.location.href = "Inventory-Stock-Manager-Table.html"
         }
-        
-        else {
-            if (validateForm()) {
-                items.push({
-                    id:  crypto. randomUUID(),
-                    itemName: itemName.value,
-                    category: category.value,
-                    quantity: quantity.value,
-                    unitPrice: unitPrice.value,
-                    totalValue: quantity.value * unitPrice.value,
-                    addedDate: addedDate.value,
-                    expiryDate: expiryDate.value,
-                    restockDate: restockDate.value,
-                    expiryStatus: findExpiryStatus(expiryDate.value),
-                    restockStatus: findRestockStatus(restockDate.value),
-                    updatedAt: new Date(Date.now())
-                })
-                console.log(items);
+    }
+
+    else {
+        if (validateForm()) {
+            items.push({
+                id: crypto.randomUUID(),
+                itemName: itemName.value,
+                category: category.value,
+                quantity: quantity.value,
+                unitPrice: unitPrice.value,
+                totalValue: quantity.value * unitPrice.value,
+                addedDate: addedDate.value,
+                expiryDate: expiryDate.value,
+                restockDate: restockDate.value,
+                expiryStatus: findExpiryStatus(expiryDate.value),
+                restockStatus: findRestockStatus(restockDate.value),
+                updatedAt: new Date(Date.now())
+            })
+            console.log(items);
             form.reset();
             window.alert("Item Added Successfully");
             updateItemsInLocalStorage();
@@ -257,24 +262,30 @@ saveItemBtn.onclick = () => {
 }
 
 function editItem(id) {
+    let isPageAvailable = false
     editMode = true;
     idToEdit = id;
     document.getElementById('heading').innerHTML = 'Edit Item'
     saveItemBtn.innerHTML = "Update";
     items.forEach((item) => {
         if (item.id == id) {
+            isPageAvailable = true;
             itemName.value = item.itemName;
             category.value = item.category;
             quantity.value = item.quantity;
             unitPrice.value = item.unitPrice;
             addedDate.value = item.addedDate,
-            expiryDate.value = item.expiryDate,
-            restockDate.value = item.restockDate
+                expiryDate.value = item.expiryDate,
+                restockDate.value = item.restockDate
         }
     })
+    if (!isPageAvailable) {
+        window.alert("Requested Item not found, Redirecting to home page");
+        window.location.href = "home.html"
+    }
 }
 
-function findDaysToExpire(expiryDate){      
+function findDaysToExpire(expiryDate) {
     let today = new Date();
     let expiry = new Date(expiryDate);
 
@@ -283,7 +294,7 @@ function findDaysToExpire(expiryDate){
 
     let diffInMs = expiry - today;
     let diffInDays = Math.ceil(diffInMs / msPerDay);
-    
+
     return diffInDays;
 }
 
@@ -291,16 +302,16 @@ function findExpiryStatus(expiryDate) {
 
     let noOfDaysToExpire = findDaysToExpire(expiryDate);
 
-    if(noOfDaysToExpire <= 0){
+    if (noOfDaysToExpire <= 0) {
         return "Expired";
     }
 
-    else{
+    else {
         return `Expire in ${noOfDaysToExpire} days`;
     }
 }
 
-function findDaysToRestock(restockDate){
+function findDaysToRestock(restockDate) {
     let today = new Date();
     let restock = new Date(restockDate);
 
@@ -317,11 +328,11 @@ function findRestockStatus(restockDate) {
 
     let noOfDaysToRestock = findDaysToRestock(restockDate);
 
-    if(noOfDaysToRestock <= 0){
+    if (noOfDaysToRestock <= 0) {
         return "Restock OverDue"
     }
 
-    else{
+    else {
         return `Restock in ${noOfDaysToRestock} days`;
     }
 
@@ -345,5 +356,5 @@ window.addEventListener('load', () => {
     idToEdit = currentUrl.split('?')[1];
     if (idToEdit) {
         editItem(idToEdit);
-    }   
+    }
 })
