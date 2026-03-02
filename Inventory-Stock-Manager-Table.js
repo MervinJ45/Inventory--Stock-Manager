@@ -5,6 +5,15 @@ const msPerDay = 86400000
 const searchBox = document.getElementById('searchBox');
 const filterCategory = document.getElementById('filterCategory');
 const filterStatus = document.getElementById('filterStatus');
+const filterBtn = document.getElementById('applyFilterBtn'); 
+
+const allCategory = "All category";
+const allStatus = "All status";
+const expired = "Expired";
+const expiringSoon = "Expiring Soon";
+const restockOverdue = "Restock Overdue";
+
+let isFilterApplied = false;
 
 function generateTable(items) {
     if(searchBox.value != ""){
@@ -34,7 +43,6 @@ function renderItemAsRows(item) {
 }
 
 function editItem(id) {
-    // updateItemsInLocalStorage();
     window.location.href = "Inventory-Stock-Manager.html?" + id
 }
 
@@ -95,11 +103,11 @@ function findExpiryStatus(expiryDate) {
     let noOfDaysToExpire = findDaysToExpire(expiryDate);
     
     if(noOfDaysToExpire <= 0){
-        return "Expired";
+        return expired;
     }
     
     else{
-        return `Expire in ${noOfDaysToExpire} days`;
+        return `${noOfDaysToExpire} days left`;
     }
 }
 
@@ -121,18 +129,18 @@ function findRestockStatus(restockDate) {
     let noOfDaysToRestock = findDaysToRestock(restockDate);
     
     if(noOfDaysToRestock <= 0){
-        return "Restock OverDue"
+        return restockOverdue
     }
     
     else{
-        return `Restock in ${noOfDaysToRestock} days`;
+        return `${noOfDaysToRestock} days left`;
     }
     
 }
 
 function clearFilter(){
-    filterCategory.value = "All Category";
-    filterStatus.value = "All Status";
+    filterCategory.value = allCategory;
+    filterStatus.value = allStatus;
 }
 
 function clearSearch(){
@@ -160,7 +168,7 @@ function search(searchInput) {
     }
     tableBody.innerHTML = "";
     arrayToSearch.forEach((item) => {
-        if(item.itemName.toLowerCase().includes(searchInput)){
+        if(item.itemName.toLowerCase().includes(searchInput.toLowerCase())){
             found = true;
             renderItemAsRows(item);
         }
@@ -178,6 +186,29 @@ function search(searchInput) {
 
 searchBox.addEventListener('input', (e) => debSearch(e.target.value))
 
+filterBtn.onclick = ()=>{
+    handleFilterBtnClick();
+}
+
+function handleFilterBtnClick(){
+    if(!isFilterApplied){
+        filterBtn.innerText = "Remove Filter";
+        filterCategory.setAttribute("disabled",true);
+        filterStatus.setAttribute("disabled",true);
+    }
+    else{
+        clearFilter();
+        if(window.location.href != "Inventory-Stock-Manager-table.html"){
+            window.location.href = "Inventory-Stock-Manager-table.html";
+        }
+        filterBtn.innerText = "Apply Filter";
+        filterCategory.removeAttribute("disabled");
+        filterStatus.removeAttribute("disabled");
+    }
+    applyFilter();
+    isFilterApplied = !isFilterApplied;
+}
+
 function applyFilter(){
     
     filteredItems.length = 0;
@@ -187,7 +218,7 @@ function applyFilter(){
     tableBody.innerHTML = "";
     
     
-    if (filterCategory.value == "All Category" && filterStatus == "All Status") {
+    if (filterCategory.value == allCategory && filterStatus.value == allStatus) {
         generateTable(items);
         return;
     }
@@ -199,25 +230,24 @@ function applyFilter(){
         let categoryMatch = true;
         let statusMatch = true;
         
-        if (filterCategory.value !== "All Category") {
+        if (filterCategory.value !== allCategory) {
             categoryMatch = (item.category === filterCategory.value);
         }
         
-        if (filterStatus.value !== "All Status") {
+        if (filterStatus.value !== allStatus) {
             
-            if (filterStatus.value === "Expired") {
-                statusMatch = (item.expiryStatus === "Expired");
+            if (filterStatus.value === expired) {
+                statusMatch = (item.expiryStatus === expired);
             }
             
-            else if (filterStatus.value === "Expiring Soon") {
+            else if (filterStatus.value === expiringSoon) {
                 statusMatch = (findDaysToExpire(item.expiryDate) <= 7 && findDaysToExpire(item.expiryDate) > 0);
             }
             
-            else if (filterStatus.value === "Restock Overdue") {
-                statusMatch = (item.restockStatus === "Restock OverDue");
+            else if (filterStatus.value === restockOverdue) {
+                statusMatch = (item.restockStatus === restockOverdue);
             }
         }
-        console.log(categoryMatch +" "+ statusMatch)
         if (categoryMatch && statusMatch) {
             filteredItems.push(item);
             found = true;
@@ -273,6 +303,92 @@ document.getElementById('sortByName').addEventListener('click',()=>{
     asc = !asc
 })
 
+document.getElementById("sortByCategory").addEventListener("click", () => {
+  clearFilter();
+  clearSearch();
+  if (asc) {
+    let sorted = items.sort((a, b) => a.category.localeCompare(b.category));
+    generateTable(sorted);
+  } else {
+    let sorted = items.sort((a, b) => b.category.localeCompare(a.category));
+    generateTable(sorted);
+  }
+  asc = !asc;
+});
+
+document.getElementById("sortByQuantity").addEventListener("click", () => {
+  clearFilter();
+  clearSearch();
+  if (asc) {
+    let sorted = items.sort((a, b) => a.quantity - b.quantity);
+    generateTable(sorted);
+  } else {
+    let sorted = items.sort((a, b) => b.quantity - a.quantity);
+    generateTable(sorted);
+  }
+  asc = !asc;
+});
+
+document.getElementById("sortByUnitPrice").addEventListener("click", () => {
+  clearFilter();
+  clearSearch();
+  if (asc) {
+    let sorted = items.sort((a, b) => a.unitPrice - b.unitPrice);
+    generateTable(sorted);
+  } else {
+    let sorted = items.sort((a, b) => b.unitPrice - a.unitPrice);
+    generateTable(sorted);
+  }
+  asc = !asc;
+});
+
+document.getElementById("sortByTotalPrice").addEventListener("click", () => {
+  clearFilter();
+  clearSearch();
+  if (asc) {
+    let sorted = items.sort((a, b) => a.totalValue - b.totalValue);
+    generateTable(sorted);
+  } else {
+    let sorted = items.sort((a, b) => b.totalValue - a.totalValue);
+    generateTable(sorted);
+  }
+  asc = !asc;
+});
+
+document.getElementById("sortByAddedDate").addEventListener("click", () => {
+  clearFilter();
+  clearSearch();
+  if (asc) {
+    let sorted = items.sort(
+      (a, b) => new Date(a.addedDate) - new Date(b.addedDate),
+    );
+    generateTable(sorted);
+  } else {
+    let sorted = items.sort(
+      (a, b) => new Date(b.addedDate) - new Date(a.addedDate),
+    );
+    generateTable(sorted);
+  }
+  asc = !asc;
+});
+
+document.getElementById("sortByExpiryDate").addEventListener("click", () => {
+  clearFilter();
+  clearSearch();
+  if (asc) {
+    let sorted = items.sort(
+      (a, b) => new Date(a.expiryDate) - new Date(b.expiryDate),
+    );
+    generateTable(sorted);
+  } else {
+    let sorted = items.sort(
+      (a, b) => new Date(b.expiryDate) - new Date(a.expiryDate),
+    );
+    generateTable(sorted);
+  }
+  asc = !asc;
+});
+
 function updateItemsInLocalStorage() {
     let string = JSON.stringify(items);
     localStorage.setItem("items", string);
@@ -282,15 +398,17 @@ let statusToCheck;
 
 window.addEventListener('load', () => {
     let string = localStorage.getItem('items');
-    items = JSON.parse(string);
+    items = JSON.parse(string) || [];
+      let selectedWarehouse = localStorage.getItem("selectedWarehouse");
+  items = items.filter((item) => item.warehouseId === selectedWarehouse);
     let currentUrl = window.location.href;
     statusToCheck = decodeURI(currentUrl.split('?')[1]);
-    if(statusToCheck == "Expired" || statusToCheck == "Expiring Soon" || statusToCheck == "Restock Overdue"){
+    if(statusToCheck == expired || statusToCheck == expiringSoon || statusToCheck == restockOverdue){
         filterStatus.value = statusToCheck;
-        applyFilter();
+        handleFilterBtnClick();
     }
     else{
-        filterStatus.value = "All Status";
+        filterStatus.value = allStatus;
         generateTable(items);
     }
 })

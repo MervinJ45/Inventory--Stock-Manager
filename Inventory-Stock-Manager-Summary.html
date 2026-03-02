@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Inventory Management System</title>
+    <link rel="stylesheet" href="Inventory-Stock-Manager.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+  </head>
+
+  <body>
+    <aside class="sidebar">
+      <button id="currentWarehouseName" onclick="goToHome()">Warehouses</button>
+
+      <button id="active" onclick="goToSummary()">Summary</button>
+
+      <button onclick="goToAdd()">Add Items</button>
+
+      <button onclick="goToTable()">Table</button>
+    </aside>
+
+    <div class="home-main">
+      <header class="hero">
+        <h1>Inventory Management System</h1>
+        <p>Track stock, expiry dates, and restocking efficiently</p>
+      </header>
+
+      <section class="section">
+        <h2>Summary</h2>
+
+        <div class="cards">
+          <div id="totalItem" class="card">
+            <h3>Total Items</h3>
+            <div class="summary-value" id="displayTotalItem">0</div>
+          </div>
+
+          <div id="totalValue" class="card">
+            <h3>Total Value</h3>
+            <div class="summary-value" id="displayTotalValue">₹0</div>
+          </div>
+
+          <div id="goToExpiredItems" class="card clickable-div">
+            <h3>Expired Items</h3>
+            <div class="summary-value" id="displayExpiredItems">0</div>
+            <i class="fa fa-arrow-right"></i>
+          </div>
+
+          <div id="goToExpiringItems" class="card clickable-div">
+            <h3>Expiring Items (7 days)</h3>
+            <div class="summary-value" id="displayExpiringItems">0</div>
+            <i class="fa fa-arrow-right"></i>
+          </div>
+
+          <div id="goToRestockItems" class="card clickable-div">
+            <h3>Restock Overdue</h3>
+            <div class="summary-value" id="displayRestockItems">0</div>
+            <i class="fa fa-arrow-right"></i>
+          </div>
+        </div>
+      </section>
+
+      <footer>Inventory Management System © 2026</footer>
+    </div>
+
+    <script>
+      function goToAdd() {
+        window.location.href = "Inventory-Stock-Manager.html";
+      }
+      function goToSummary() {
+        window.location.href = "Inventory-Stock-Manager-Summary.html";
+      }
+      function goToTable() {
+        window.location.href = "Inventory-Stock-Manager-Table.html";
+      }
+      function goToHome() {
+        window.location.href = "home.html";
+      }
+
+      window.addEventListener("load", function () {
+        const warehouse = localStorage.getItem("selectedWarehouse");
+        document.getElementById("currentWarehouseName").innerText =
+          warehouse.charAt(0).toUpperCase() + warehouse.slice(1) + " Warehouse";
+      });
+    </script>
+
+    <script src="Inventory-Stock-Manager-Summary.js"></script>
+  </body>
+</html>

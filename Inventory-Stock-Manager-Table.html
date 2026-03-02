@@ -1,71 +1,106 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+  <head>
+    <link rel="stylesheet" href="Inventory-Stock-Manager.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+  </head>
 
-<head>
-    <link rel="stylesheet" href="Inventory-Stock-Manager.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
-
-<body>
+  <body>
     <div class="layout">
-        <aside class="sidebar">
-            <a href="home.html"><button><i class="fa fa-home"></i> Home</button></a>
-           <a href="Inventory-Stock-Manager.html"><button>Add Item</button></a>
-            <a href="Inventory-Stock-Manager-Table.html"><button  id="active">Table</button></a>
-        </aside>
+      <aside class="sidebar">
+        <button id="currentWarehouseName" onclick="goToHome()">
+          Warehouses
+        </button>
+
+        <button onclick="goToSummary()">Summary</button>
+
+        <button onclick="goToAdd()">Add Items</button>
+
+        <button id="active" onclick="goToTable()">Table</button>
+      </aside>
     </div>
     <div>
-        <main class="content">
-            <div id="filterSearchContent">
-            <input id="searchBox" type="text" placeholder="Type To Search">
-                <h3>Filter by :</h3>
-                <div>
-                    <select id="filterCategory">
-                        <option>All Category</option>
-                        <option>Groceries</option>
-                        <option>Dairy</option>
-                        <option>Poultry</option>
-                        <option>Bakery</option>
-                        <option>Beverages</option>
-                        <option>Personal Care</option>
-                        <option>Household</option>
-                    </select>
-                </div>
-                <div>
-                    <select id="filterStatus">
-                        <option>All Status</option>
-                        <option>Expired</option>
-                        <option>Expiring Soon</option>
-                        <option>Restock Overdue</option>
-                    </select>
-                </div>
-                <button id="applyFilterBtn" onclick="applyFilter()">Apply Filter</button>
-            </div>
+      <main class="content">
+        <div id="filterSearchContent">
+          <input id="searchBox" type="text" placeholder="Type To Search" />
+          <h3>Filter by :</h3>
+          <div>
+            <select id="filterCategory">
+              <option>All Category</option>
+              <option>Groceries</option>
+              <option>Dairy</option>
+              <option>Poultry</option>
+              <option>Bakery</option>
+              <option>Beverages</option>
+              <option>Personal Care</option>
+              <option>Household</option>
+            </select>
+          </div>
+          <div>
+            <select id="filterStatus">
+              <option>All Status</option>
+              <option>Expired</option>
+              <option>Expiring Soon</option>
+              <option>Restock Overdue</option>
+            </select>
+          </div>
+          <button id="applyFilterBtn" onclick="applyFilter()">
+            Apply Filter
+          </button>
+        </div>
 
-                <div id="tableView">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th id="sortByName">Name <i class="fa fa-sort" aria-hidden="true"></i></th>
-                                <th>Category</th>
-                                <th id="sortByQuantity">Quantity</th>
-                                <th>Unit Price</th>
-                                <th>Total Price</th>
-                                <th>Added Date</th>
-                                <th>Expiry Date</th>
-                                <th>Expiry Status</th>
-                                <th>Restock Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody"></tbody>
-                    </table>
-                </div>
-
-
-        </main>
+        <div id="tableView">
+          <table>
+            <thead>
+              <tr>
+                <th id="sortByName">Name <i class="fa fa-sort"></i></th>
+                <th id="sortByCategory">Category <i class="fa fa-sort"></i></th>
+                <th id="sortByQuantity">Quantity <i class="fa fa-sort"></i></th>
+                <th id="sortByUnitPrice">
+                  Unit Price <i class="fa fa-sort"></i>
+                </th>
+                <th id="sortByTotalPrice">
+                  Total Price <i class="fa fa-sort"></i>
+                </th>
+                <th id="sortByAddedDate">
+                  Added Date <i class="fa fa-sort"></i>
+                </th>
+                <th id="sortByExpiryDate">
+                  Expiry Date <i class="fa fa-sort"></i>
+                </th>
+                <th id="sortByExpiryStatus">Expiry Status</th>
+                <th id="sortByRestockStatus">Restock Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </main>
     </div>
-    <script src="Inventory-Stock-Manager-Table.js"></script>
-</body>
+    <script>
+      function goToAdd() {
+        window.location.href = "Inventory-Stock-Manager.html";
+      }
+      function goToSummary() {
+        window.location.href = "Inventory-Stock-Manager-Summary.html";
+      }
+      function goToTable() {
+        window.location.href = "Inventory-Stock-Manager-Table.html";
+      }
+      function goToHome() {
+        window.location.href = "home.html";
+      }
 
+      window.addEventListener("load", function () {
+        const warehouse = localStorage.getItem("selectedWarehouse");
+        document.getElementById("currentWarehouseName").innerText =
+          warehouse.charAt(0).toUpperCase() + warehouse.slice(1) + " Warehouse";
+      });
+    </script>
+    <script src="Inventory-Stock-Manager-Table.js"></script>
+  </body>
 </html>

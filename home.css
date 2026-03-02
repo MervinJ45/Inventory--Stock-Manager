@@ -1,0 +1,82 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f6f9;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.hero {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+  padding: 40px;
+  text-align: center;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: 34px;
+}
+
+.hero p {
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+.center-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 320px);
+  gap: 30px;
+}
+
+.card {
+  background-color: white;
+  padding: 40px 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: 0.3s;
+}
+
+.card h3 {
+  margin-top: 15px;
+  font-size: 22px;
+}
+
+.card p {
+  color: #666;
+  margin-top: 8px;
+}
+
+.clickable-div {
+  cursor: pointer;
+}
+
+.clickable-div:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+}
+
+.warehouse-icon {
+  font-size: 50px;
+  color: #007bff;
+}
+
+footer {
+  text-align: center;
+  padding: 15px;
+  background-color: white;
+  color: #666;
+  border-top: 1px solid #ddd;
+}

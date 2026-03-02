@@ -129,7 +129,8 @@ const saveItemBtn = document.getElementById('saveItemBtn');
 const resetBtn = document.getElementById('resetBtn');
 let idToEdit;
 let editMode = false;
-items = JSON.parse(localStorage.getItem('items')) || null;
+
+let items = JSON.parse(localStorage.getItem('items')) || [];
 
 function updateItemsInLocalStorage() {
     let string = JSON.stringify(items);
@@ -154,21 +155,21 @@ function validateForm() {
     const expiryDate = document.getElementById("expiryDate");
     const restockDate = document.getElementById("restockDate");
 
-    if (itemName.value.length < 2 || itemName == "") {
+    if (itemName.value.length < 2 || itemName.value  == "") {
         itemName.parentElement.insertAdjacentHTML(
             "beforeend",
             `<p class="error">Min 2 Characters</p>`
         );
     }
 
-    if (quantity.value == "" || quantity.value < 0) {
+    if (quantity.value == "" || quantity.value < 1) {
         quantity.parentElement.insertAdjacentHTML(
             "beforeend",
             `<p class="error">Quantity must be greater than 0</p>`
         );
     }
 
-    if (unitPrice.value == "" || unitPrice.value < 0) {
+    if (unitPrice.value == "" || unitPrice.value < 1) {
         unitPrice.parentElement.insertAdjacentHTML(
             "beforeend",
             `<p class="error">Unit price must be greater than 0</p>`
@@ -196,8 +197,20 @@ function validateForm() {
         );
     }
 
-    if (itemName.value.length >= 2 && itemName != "" && category.value && quantity.value != "" && quantity.value >= 0 && unitPrice.value != "" && unitPrice.value > 0 && addedDate.value && expiryDate.value && expiryDate.value > addedDate.value && restockDate.value) {
-        return true
+    if (
+        itemName.value.length >= 2 &&
+        itemName.value != "" &&
+        category.value &&
+        quantity.value != "" &&
+        quantity.value > 0 &&
+        unitPrice.value != "" &&
+        unitPrice.value > 0 &&
+        addedDate.value &&
+        expiryDate.value &&
+        expiryDate.value > addedDate.value &&
+        restockDate.value
+    ) {
+        return true;
     }
 
 }
@@ -218,21 +231,27 @@ saveItemBtn.onclick = () => {
                         item.quantity = quantity.value,
                         item.unitPrice = unitPrice.value;
                     item.totalValue = quantity.value * unitPrice.value;
+
                     item.addedDate = addedDate.value,
                         item.expiryDate = expiryDate.value,
                         item.restockDate = restockDate.value,
+
                         item.expiryStatus = findExpiryStatus(expiryDate.value);
                     item.restockStatus = findRestockStatus(restockDate.value);
-                    item.updatedAt = new Date(Date.now())
+                    item.updatedAt = new Date(Date.now());
                 }
             })
             saveItemBtn.innerHTML = "Add";
             form.reset();
             idToEdit = "";
             editMode = false;
+
             window.alert("Item Edited Successfully");
+
             updateItemsInLocalStorage();
+
             document.getElementById('heading').innerHTML = 'Add Form'
+
             window.location.href = "Inventory-Stock-Manager-Table.html"
         }
     }
@@ -241,6 +260,7 @@ saveItemBtn.onclick = () => {
         if (validateForm()) {
             items.push({
                 id: crypto.randomUUID(),
+                warehouseId: localStorage.getItem("selectedWarehouse"),
                 itemName: itemName.value,
                 category: category.value,
                 quantity: quantity.value,
@@ -253,7 +273,6 @@ saveItemBtn.onclick = () => {
                 restockStatus: findRestockStatus(restockDate.value),
                 updatedAt: new Date(Date.now())
             })
-            console.log(items);
             form.reset();
             window.alert("Item Added Successfully");
             updateItemsInLocalStorage();
@@ -307,7 +326,7 @@ function findExpiryStatus(expiryDate) {
     }
 
     else {
-        return `Expire in ${noOfDaysToExpire} days`;
+        return `${noOfDaysToExpire} days left`;
     }
 }
 
@@ -333,7 +352,7 @@ function findRestockStatus(restockDate) {
     }
 
     else {
-        return `Restock in ${noOfDaysToRestock} days`;
+        return `${noOfDaysToRestock} days left`;
     }
 
 }
@@ -349,6 +368,8 @@ function formatDate() {
 }
 
 formatDate()
+
+
 
 
 window.addEventListener('load', () => {
