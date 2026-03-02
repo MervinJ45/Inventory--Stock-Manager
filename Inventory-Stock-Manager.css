@@ -255,6 +255,7 @@ td {
 th {
     background: linear-gradient(to bottom, #3498db, #063e66);
     color: white;
+    cursor: pointer;
 }
 
 td button {

@@ -212,8 +212,6 @@ function handleFilterBtnClick(){
 function applyFilter(){
     
     filteredItems.length = 0;
-
-    clearSearch();
     
     tableBody.innerHTML = "";
     
@@ -245,7 +243,7 @@ function applyFilter(){
             }
             
             else if (filterStatus.value === restockOverdue) {
-                statusMatch = (item.restockStatus === restockOverdue);
+                statusMatch = (findDaysToRestock(item.restockDate) <= 0);
             }
         }
         if (categoryMatch && statusMatch) {
@@ -369,7 +367,7 @@ document.getElementById("sortByAddedDate").addEventListener("click", () => {
     );
     generateTable(sorted);
   }
-  asc = !asc;
+  asc = !asc
 });
 
 document.getElementById("sortByExpiryDate").addEventListener("click", () => {
@@ -398,13 +396,14 @@ let statusToCheck;
 
 window.addEventListener('load', () => {
     let string = localStorage.getItem('items');
-    items = JSON.parse(string) || [];
+    items = JSON.parse(string);
       let selectedWarehouse = localStorage.getItem("selectedWarehouse");
   items = items.filter((item) => item.warehouseId === selectedWarehouse);
     let currentUrl = window.location.href;
     statusToCheck = decodeURI(currentUrl.split('?')[1]);
     if(statusToCheck == expired || statusToCheck == expiringSoon || statusToCheck == restockOverdue){
         filterStatus.value = statusToCheck;
+        console.log(filterStatus.value);
         handleFilterBtnClick();
     }
     else{
